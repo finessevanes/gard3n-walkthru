@@ -4,6 +4,7 @@ import {
   client,
   getRecommendedProfiles
  } from '../api'
+ import Link from 'next/link'
 
 export default function Profiles() {
   const [profiles, setProfiles] = useState([])
@@ -15,7 +16,8 @@ export default function Profiles() {
   async function fetchRecommendedProfiles() {
     try {
       const response = await client.query(getRecommendedProfiles).toPromise()
-      console.log(response.data.recommendedProfiles)
+      const recommendedProfiles = response.data.recommendedProfiles
+      setProfiles(recommendedProfiles)
     } catch(e){
       console.log(e)
     }
@@ -39,6 +41,29 @@ export default function Profiles() {
     <div className='flex w-screen h-screen'>
       <Navigation />
       <div className='overflow-scroll w-2/3'>
+      {
+          profiles.map((profile, i) => (
+              <Link key={i} href={`/profile/${profile.id}`}>
+                  <div className={profileItemStyle}>
+                    {
+                      profile.picture ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={profile.picture?.original?.url || profile.picture.uri}
+                          alt={profile.handle}
+                          className='h-20 w-20 rounded-full mb-3'
+                        />
+                      ) : (
+                        <div className='h-20 w-20 rounded-full bg-gray-500'>
+                        </div>
+                      )
+                    }
+                    <h4>{profile.handle}</h4>
+                    <p className='text-xs'>{profile.bio ? profile.bio : CONSTANT_BIO}</p>
+                  </div>
+              </Link>
+          ))
+        }
       </div>
     </div>
   )

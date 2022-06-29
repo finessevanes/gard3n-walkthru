@@ -21,13 +21,24 @@ export default function Profiles() {
     }
   }
 
+  const profileItemStyle = `
+  p-8
+  bg-white
+  shadow-custom
+  rounded-lg
+  w-10/12
+  ml-8
+  mt-4
+  mb-8
+  cursor-pointer
+  `
+
   if (!profiles) return null
 
   return (
-    <div className='flex h-screen'>
+    <div className='flex w-screen h-screen'>
       <Navigation />
-      <div className='w-2/3 flex justify-center items-center'>
-        <h3 className=''>Profiles loaded here...</h3>
+      <div className='overflow-scroll w-2/3'>
       </div>
     </div>
   )

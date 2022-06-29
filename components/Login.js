@@ -30,9 +30,9 @@ const Login = () => {
     `
 
   const TitleStyle = `
-    text-bold drop-shadow-xl
-    text-4xl
-    font-sans
+    drop-shadow-xl
+    text-5xl
+    text-lens-300
     `
 
   return (
@@ -42,7 +42,7 @@ const Login = () => {
         ) : (
             <div className='pt-80 text-center'>
             <Image src="/gard3n-logo-02.svg" height={300} width={300} alt='gard3n-logo' />
-            <h1 className={TitleStyle}>gard3n</h1>
+            <h1 className={TitleStyle}>GARD3N</h1>
             <button className={ButtonStyle} onClick={connectWallet}>Connect Wallet</button>
             </div>
         )

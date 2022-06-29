@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import Navigation from './Navigation'
+import {
+  client,
+  getRecommendedProfiles
+ } from '../api'
 
 export default function Profiles() {
   const [profiles, setProfiles] = useState([])
@@ -9,7 +13,12 @@ export default function Profiles() {
   }, [])
 
   async function fetchRecommendedProfiles() {
-    console.log('fetchRecommendedProfiles has been called')
+    try {
+      const response = await client.query(getRecommendedProfiles).toPromise()
+      console.log(response.data.recommendedProfiles)
+    } catch(e){
+      console.log(e)
+    }
   }
 
   if (!profiles) return null

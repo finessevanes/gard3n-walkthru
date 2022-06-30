@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { client, getProfile, getPublications } from '../../api'
 import Navigation from '../../components/Navigation'
-import Link from 'next/link'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
 
 export default function SelectedProfile() {
@@ -73,11 +72,7 @@ export default function SelectedProfile() {
           <p>{profile.bio}</p>
           <div className='flex items-center place-content-between mt-2'>
             <span>Followers: {profile.stats.totalFollowers} | Following: {profile.stats.totalFollowing}</span>
-            <Link key={profile.id} href={`/profiles`}>
-              <a>
-                <button className={ButtonStyle}>Back</button>
-              </a>
-            </Link>
+              <button onClick={()=> router.push('/profiles')} className={ButtonStyle}>Back</button>
           </div>
         </div>
         {

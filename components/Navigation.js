@@ -16,6 +16,8 @@ const Navigation = () => {
     w-1/3
     flex
     flex-col
+    hidden
+    sm:inline
     `
     return (
         <nav className={NavStyle}>

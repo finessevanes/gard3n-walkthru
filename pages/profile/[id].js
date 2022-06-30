@@ -37,17 +37,30 @@ export default function SelectedProfile() {
   ml-8
   mr-16
   mb-8
+  w-10/12
+  `
+
+  const profilePublicationStyle = `
+  m-4
+  p-8
+  bg-white
+  shadow-custom
+  rounded-lg
+  ml-8
+  mr-16
+  mb-6
+  w-10/12
   `
 
   return (
     <div className='flex w-screen h-screen'>
       <Navigation />
-      <div className='w-2/3'>
+      <div className='sm:w-2/3'>
         <div className={profileDetailStyle}>
           <img
             src={profile.picture?.original?.url || profile.picture.uri}
             alt={profile.handle}
-            className='h-40 w-40 rounded-full mb-3'
+            className='mr-1 sm:h-20 sm:w-20 h-10 w-10 rounded-full mb-3'
           />
           <h4>{profile.handle}</h4>
           <p>{profile.bio}</p>

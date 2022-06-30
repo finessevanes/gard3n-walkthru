@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Profiles from '../components/Profiles'
 import Image from 'next/image'
+import { ButtonStyle, TitleStyle } from './Login.styles'
 
 const Login = () => {
   const [currentAccount, setCurrentAccount] = useState('')
@@ -18,33 +18,18 @@ const Login = () => {
     console.log('connectWallet was called')
   }
 
-  const ButtonStyle = `
-    bg-lens-300
-    hover:bg-green-600
-    text-white
-    py-3
-    px-5
-    rounded-full
-    shadow-custom
-    mt-40
-    `
-
-  const TitleStyle = `
-    drop-shadow-xl
-    text-5xl
-    text-lens-300
-    `
-
   return (
     <div>
       { currentAccount ? (
         <Profiles />
         ) : (
-            <div className='pt-80 text-center'>
+          <div className='pt-80 text-center'>
             <Image src="/gard3n-logo-02.svg" height={300} width={300} alt='gard3n-logo' />
             <h1 className={TitleStyle}>GARD3N</h1>
-            <button className={ButtonStyle} onClick={connectWallet}>Connect Wallet</button>
-            </div>
+            <button className={ButtonStyle} onClick={connectWallet}>
+              Connect Wallet
+            </button>
+          </div>
         )
       }
     </div>

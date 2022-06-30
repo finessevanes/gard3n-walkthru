@@ -1,24 +1,7 @@
 import Image from 'next/image'
+import { ButtonStyle, NavStyle} from './Navigation.styles'
 
 const Navigation = () => {
-    const ButtonStyle = `
-    bg-lens-300
-    hover:bg-green-600
-    text-white
-    py-3
-    px-5
-    rounded-full
-    shadow-custom
-    mt-60
-    `
-    const NavStyle = `
-    bg-white
-    w-1/3
-    flex
-    flex-col
-    hidden
-    sm:inline
-    `
     return (
         <nav className={NavStyle}>
             <div className='mt-60 pl-12'>

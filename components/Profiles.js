@@ -5,6 +5,7 @@ import {
   getRecommendedProfiles
  } from '../api'
  import Link from 'next/link'
+ import { ProfileItemStyle, ImageStyle} from './Profiles.styles'
 
 export default function Profiles() {
   const [profiles, setProfiles] = useState([])
@@ -23,22 +24,6 @@ export default function Profiles() {
     }
   }
 
-  const profileItemStyle = `
-  p-4
-  bg-white
-  shadow-custom
-  rounded-lg
-  w-10/12
-  ml-8
-  mt-4
-  mb-4
-  cursor-pointer
-  `
-
-  const imageStyle = `
-  mr-1 sm:h-20 sm:w-20 h-10 w-10 rounded-full mb-3
-  `
-
   if (!profiles) return null
 
   return (
@@ -48,7 +33,7 @@ export default function Profiles() {
       {
           profiles.map((profile, i) => (
               <Link key={i} href={`/profile/${profile.id}`}>
-                  <div className={profileItemStyle}>
+                  <div className={ ProfileItemStyle }>
                     <div className='flex items-center'>
                     {
                       profile.picture ? (
@@ -56,10 +41,10 @@ export default function Profiles() {
                         <img
                           src={profile.picture?.original?.url || profile.picture.uri}
                           alt={profile.handle}
-                          className={imageStyle}
+                          className={ImageStyle}
                         />
                       ) : (
-                        <div className={imageStyle + `bg-gray-500`}>
+                        <div className={ImageStyle + `bg-gray-500`}>
                         </div>
                       )
                     }

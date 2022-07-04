@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { client, getProfile, getPublications } from '../../api'
 import Navigation from '../../components/Navigation'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
+import Image from 'next/image'
 
 export default function SelectedProfile({ profile }) {
   const [publications, setPublications] = useState()
@@ -39,24 +40,28 @@ export default function SelectedProfile({ profile }) {
     <div className='flex w-screen h-screen'>
       <Navigation />
       <div className='overflow-scroll sm:w-2/3'>
-        <div className={ProfileDetailStyle}>
+      <div className={ProfileDetailStyle}>
           <div className='flex items-center'>
             {
               profile.picture ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={profile.picture?.original?.url || profile.picture.uri}
-                  alt={profile.handle}
-                  className={ImageStyle}
+                <Image
+                placeholder="blur"
+                src={profile.picture?.original?.url || profile.picture.uri}
+                alt={profile.handle.slice(0, -4)}
+                width={80}
+                height={80}
+                className='rounded-full'
+                blurDataURL='https://media.barchart.com/news/authors/default-user.png'
                 />
               ) : (
                 <div className={ImageStyle + `bg-gray-500`}>
                 </div>
               )
             }
-            <h4 className='text-lg'>{profile.name} | @{profile.handle.slice(0, -5)}</h4>
+            <h4 className='text-lg ml-2'>{profile.name} | @{profile.handle.slice(0, -5)}</h4>
           </div>
-          <p>{profile.bio}</p>
+          <p className='mt-2'>{profile.bio}</p>
           <div className='flex items-center place-content-between mt-2'>
             <span>Followers: {profile.stats.totalFollowers} | Following: {profile.stats.totalFollowing}</span>
               <button onClick={()=> router.push('/profiles')} className={ButtonStyle}>Back</button>
@@ -66,14 +71,18 @@ export default function SelectedProfile({ profile }) {
           publications?.map((pub, i) => (
             <div key={i} className={ProfilePublicationStyle}>
               <div className='flex items-center'>
-                <img
+                <Image
+                  placeholder="blur"
                   src={profile.picture?.original?.url || profile.picture.uri}
                   alt={profile.handle.slice(0, -4)}
-                  className={ImageStyle}
+                  width={60}
+                  height={60}
+                  className='rounded-full'
+                  blurDataURL='https://media.barchart.com/news/authors/default-user.png'
                 />
-                <span>{profile.name} | @{profile.handle.slice(0, 4)} | {date}</span>
+                <span className='ml-2'>{profile.name} | @{profile.handle.slice(0, 4)} | {date}</span>
               </div>
-              <p>{pub.metadata.content}</p>
+              <p className='mt-2'>{pub.metadata.content}</p>
             </div>
           ))
         }

@@ -4,6 +4,7 @@ import {
   getRecommendedProfiles
 } from '../api'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ProfileItemStyle, ImageStyle } from '../components/Profiles.styles'
 
 export default function Profiles({ recommendedProfiles }) {
@@ -21,19 +22,23 @@ export default function Profiles({ recommendedProfiles }) {
                   {
                     profile.picture ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={profile.picture?.original?.url || profile.picture.uri}
-                        alt={profile.handle}
-                        className={ImageStyle}
+                      <Image
+                      placeholder="blur"
+                      src={profile.picture?.original?.url || profile.picture.uri}
+                      alt={profile.handle.slice(0, -4)}
+                      width={80}
+                      height={80}
+                      className='rounded-full'
+                      blurDataURL='https://media.barchart.com/news/authors/default-user.png'
                       />
                     ) : (
                       <div className={ImageStyle + `bg-gray-500`}>
                       </div>
                     )
                   }
-                  <h4>{profile.handle}</h4>
+                  <h4 className='ml-2'>{profile.handle}</h4>
                 </div>
-                <p className='text-xs'>{profile.bio ? profile.bio : CONSTANT_BIO}</p>
+                <p className='text-xs mt-2'>{profile.bio ? profile.bio : CONSTANT_BIO}</p>
               </div>
             </Link>
           ))
@@ -60,5 +65,4 @@ export async function getServerSideProps() {
       '': ''
     }
   }
-
 }

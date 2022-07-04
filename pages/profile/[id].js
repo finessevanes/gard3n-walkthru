@@ -6,7 +6,22 @@ import Navigation from '../../components/Navigation'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
 import Image from 'next/image'
 
-export default function SelectedProfile({ profile, publications, date }) {
+export default function SelectedProfile({ profile, publications }) {
+
+  const getUTCdate = (createdAt) => {
+    const utcDate = new Date(createdAt)
+    const month = getMonth(utcDate.getMonth())
+    const day = utcDate.getUTCDate()
+    console.log(day)
+    return `${month} ${day}`
+  }
+
+  const getMonth = (index) => {
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+    return MONTHS[index]
+  }
 
   const router = useRouter()
 
@@ -56,7 +71,7 @@ export default function SelectedProfile({ profile, publications, date }) {
                   className='rounded-full'
                   blurDataURL='https://media.barchart.com/news/authors/default-user.png'
                 />
-                <span className='ml-2'>{profile.name} | @{profile.handle.slice(0, 4)} | {date}</span>
+                <span className='ml-2'>{profile.name} | @{profile.handle.slice(0, 4)} | {getUTCdate(pub.createdAt)}</span>
               </div>
               <p className='mt-2'>{pub.metadata.content}</p>
             </div>
@@ -68,30 +83,18 @@ export default function SelectedProfile({ profile, publications, date }) {
 }
 
 export async function getServerSideProps(context) {
-
   const { id } = context.query
-
-  const getMonth = (index) => {
-    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ]
-    return MONTHS[index]
-  }
 
   try {
     const profileRepsonse = await client.query(getProfile, { id }).toPromise()
     const publicationResponse = await client.query(getPublications, { id }).toPromise()
     const profileData = profileRepsonse.data.profile
     const publicationData = publicationResponse.data.publications.items
-    const utcDate = new Date(publicationResponse.data.publications.items[0].createdAt)
-    const month = getMonth(utcDate.getMonth())
-    const day = utcDate.getUTCDate()
 
     return {
       props: {
         profile: profileData,
-        publications: publicationData,
-        date: `${month} ${day}`
+        publications: publicationData
       }
     }
   } catch (e) {

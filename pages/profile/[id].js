@@ -44,7 +44,7 @@ export default function SelectedProfile({ profile, publications, date }) {
           </div>
         </div>
         {
-          publications?.map((pub, i) => (
+          publications && publications.map((pub, i) => (
             <div key={i} className={ProfilePublicationStyle}>
               <div className='flex items-center'>
                 <Image
@@ -68,25 +68,30 @@ export default function SelectedProfile({ profile, publications, date }) {
 }
 
 export async function getServerSideProps(context) {
-  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+
   const { id } = context.query
+
+  const getMonth = (index) => {
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ]
+    return MONTHS[index]
+  }
 
   try {
     const profileRepsonse = await client.query(getProfile, { id }).toPromise()
     const publicationResponse = await client.query(getPublications, { id }).toPromise()
     const profileData = profileRepsonse.data.profile
     const publicationData = publicationResponse.data.publications.items
-    const createdAt = publicationResponse.data.publications.items[0].createdAt
-    const convertedDate = new Date(createdAt)
-    const fullDate = `${MONTHS[convertedDate.getMonth()]} ${convertedDate.getUTCDate()}`
+    const utcDate = new Date(publicationResponse.data.publications.items[0].createdAt)
+    const month = getMonth(utcDate.getMonth())
+    const day = utcDate.getUTCDate()
 
     return {
       props: {
         profile: profileData,
         publications: publicationData,
-        date: fullDate
+        date: `${month} ${day}`
       }
     }
   } catch (e) {

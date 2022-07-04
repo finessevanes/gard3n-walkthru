@@ -6,8 +6,7 @@ import Navigation from '../../components/Navigation'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
 import Image from 'next/image'
 
-export default function SelectedProfile({ profile }) {
-  const [publications, setPublications] = useState()
+export default function SelectedProfile({ profile, publications }) {
   const [date, setDate] = useState()
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -26,8 +25,6 @@ export default function SelectedProfile({ profile }) {
     if (publicationResponse.data.publications.items.length === 0) {
       return
     }
-    const publicationData = publicationResponse.data.publications.items
-    setPublications(publicationData)
     const createdAt = publicationResponse?.data.publications.items[0].createdAt
     const convertedDate = new Date(createdAt)
     const fullDate = `${MONTHS[convertedDate.getMonth()]} ${convertedDate.getUTCDate()}`
@@ -95,10 +92,14 @@ export async function getServerSideProps(context) {
   const { id } = context.query;
   try {
     const profileRepsonse = await client.query(getProfile, { id }).toPromise()
+    const publicationResponse = await client.query(getPublications, { id }).toPromise()
     const profileData = profileRepsonse.data.profile
+    const publicationData = publicationResponse.data.publications.items
+
     return {
       props: {
-        profile: profileData
+        profile: profileData,
+        publications: publicationData
       }
     }
   } catch (e) {

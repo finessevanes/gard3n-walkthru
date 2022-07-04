@@ -12,7 +12,7 @@ export default function SelectedProfile({ profile, publications }) {
     const utcDate = new Date(createdAt)
     const month = getMonth(utcDate.getMonth())
     const day = utcDate.getUTCDate()
-    console.log(day)
+    
     return `${month} ${day}`
   }
 

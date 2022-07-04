@@ -9,11 +9,15 @@ import Image from 'next/image'
 export default function SelectedProfile({ profile, publications }) {
 
   const getUTCdate = (createdAt) => {
-    const utcDate = new Date(createdAt)
-    const month = getMonth(utcDate.getMonth())
-    const day = utcDate.getUTCDate()
-    
-    return `${month} ${day}`
+    try {
+      const utcDate = new Date(createdAt)
+      const month = getMonth(utcDate.getMonth())
+      const day = utcDate.getUTCDate()
+      
+      return `${month} ${day}`
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   const getMonth = (index) => {

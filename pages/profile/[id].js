@@ -6,30 +6,9 @@ import Navigation from '../../components/Navigation'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
 import Image from 'next/image'
 
-export default function SelectedProfile({ profile, publications }) {
-  const [date, setDate] = useState()
-  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+export default function SelectedProfile({ profile, publications, date }) {
+
   const router = useRouter()
-  const { id } = router.query
-
-  useEffect(() => {
-    if (id) {
-      getDate()
-    }
-  }, [id])
-
-  async function getDate() {
-    const publicationResponse = await client.query(getPublications, { id }).toPromise();
-    if (publicationResponse.data.publications.items.length === 0) {
-      return
-    }
-    const createdAt = publicationResponse?.data.publications.items[0].createdAt
-    const convertedDate = new Date(createdAt)
-    const fullDate = `${MONTHS[convertedDate.getMonth()]} ${convertedDate.getUTCDate()}`
-    setDate(fullDate)
-  }
 
   if (!profile) return null
 
@@ -37,19 +16,19 @@ export default function SelectedProfile({ profile, publications }) {
     <div className='flex w-screen h-screen'>
       <Navigation />
       <div className='overflow-scroll sm:w-2/3'>
-      <div className={ProfileDetailStyle}>
+        <div className={ProfileDetailStyle}>
           <div className='flex items-center'>
             {
               profile.picture ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <Image
-                placeholder="blur"
-                src={profile.picture?.original?.url || profile.picture.uri}
-                alt={profile.handle.slice(0, -4)}
-                width={80}
-                height={80}
-                className='rounded-full'
-                blurDataURL='https://media.barchart.com/news/authors/default-user.png'
+                  placeholder="blur"
+                  src={profile.picture?.original?.url || profile.picture.uri}
+                  alt={profile.handle.slice(0, -4)}
+                  width={80}
+                  height={80}
+                  className='rounded-full'
+                  blurDataURL='https://media.barchart.com/news/authors/default-user.png'
                 />
               ) : (
                 <div className={ImageStyle + `bg-gray-500`}>
@@ -61,7 +40,7 @@ export default function SelectedProfile({ profile, publications }) {
           <p className='mt-2'>{profile.bio}</p>
           <div className='flex items-center place-content-between mt-2'>
             <span>Followers: {profile.stats.totalFollowers} | Following: {profile.stats.totalFollowing}</span>
-              <button onClick={()=> router.push('/profiles')} className={ButtonStyle}>Back</button>
+            <button onClick={() => router.push('/profiles')} className={ButtonStyle}>Back</button>
           </div>
         </div>
         {
@@ -89,17 +68,25 @@ export default function SelectedProfile({ profile, publications }) {
 }
 
 export async function getServerSideProps(context) {
-  const { id } = context.query;
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+  const { id } = context.query
+
   try {
     const profileRepsonse = await client.query(getProfile, { id }).toPromise()
     const publicationResponse = await client.query(getPublications, { id }).toPromise()
     const profileData = profileRepsonse.data.profile
     const publicationData = publicationResponse.data.publications.items
+    const createdAt = publicationResponse.data.publications.items[0].createdAt
+    const convertedDate = new Date(createdAt)
+    const fullDate = `${MONTHS[convertedDate.getMonth()]} ${convertedDate.getUTCDate()}`
 
     return {
       props: {
         profile: profileData,
-        publications: publicationData
+        publications: publicationData,
+        date: fullDate
       }
     }
   } catch (e) {
@@ -110,5 +97,4 @@ export async function getServerSideProps(context) {
       '': ''
     }
   }
-
 }

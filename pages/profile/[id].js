@@ -5,8 +5,7 @@ import { client, getProfile, getPublications } from '../../api'
 import Navigation from '../../components/Navigation'
 import { ProfileDetailStyle, ProfilePublicationStyle, ImageStyle, ButtonStyle } from '../../components/[id].styles'
 
-export default function SelectedProfile() {
-  const [profile, setProfile] = useState()
+export default function SelectedProfile({ profile }) {
   const [publications, setPublications] = useState()
   const [date, setDate] = useState()
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
@@ -17,21 +16,9 @@ export default function SelectedProfile() {
 
   useEffect(() => {
     if (id) {
-      fetchProfile()
       getDate()
     }
   }, [id])
-
-
-  async function fetchProfile() {
-    try {
-      const profileRepsonse = await client.query(getProfile, { id }).toPromise()
-      const profileData = profileRepsonse.data.profile
-      setProfile(profileData)
-    } catch (e) {
-      console.log('error fetching profile...', e)
-    }
-  }
 
   async function getDate() {
     const publicationResponse = await client.query(getPublications, { id }).toPromise();
@@ -93,4 +80,25 @@ export default function SelectedProfile() {
       </div>
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+  try {
+    const profileRepsonse = await client.query(getProfile, { id }).toPromise()
+    const profileData = profileRepsonse.data.profile
+    return {
+      props: {
+        profile: profileData
+      }
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    props: {
+      '': ''
+    }
+  }
+
 }

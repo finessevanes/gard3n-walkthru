@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['ipfs.infura.io'],
+    domains: ['ipfs.infura.io', 'statics-polygon-lens.s3.eu-west-1.amazonaws.com']
     }
 }
 

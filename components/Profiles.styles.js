@@ -15,7 +15,7 @@ sm:h-20
 sm:w-20
 h-10
 w-10
-rounded-full mb-3
+rounded-full
 mb-4
 mr-4
 `
